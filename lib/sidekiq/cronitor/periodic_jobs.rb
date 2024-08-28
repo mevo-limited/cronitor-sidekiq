@@ -30,7 +30,9 @@ module Sidekiq::Cronitor
     end
 
     def self.fetch_option(lop, key, default = nil)
-      lop.options.fetch(key, default) ||
+      lop_options = lop.options.is_a?(String) ? JSON.parse(lop.options) : lop.options
+    
+      lop_options&.fetch(key, default) ||
         lop.klass.constantize.sidekiq_options.fetch(key, default)
     end
   end
